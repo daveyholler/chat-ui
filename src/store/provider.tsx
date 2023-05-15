@@ -24,9 +24,9 @@ const GLOBAL_STATE: GlobalStateType = {
   inProgressMessage: false,
 };
 
-const API_HOST = "http://127.0.0.1:4000";
-// const API_HOST =
-//   "https://workplace-search-openai-20-app.staging-3.eden.elastic.dev/api";
+// const API_HOST = "http://127.0.0.1:4000";
+const API_HOST =
+  "https://workplace-search-openai-20-app.staging-3.eden.elastic.dev/api";
 const defaultHeaders = {
   Authorization: "Basic ZWxhc3RpYzplbGFzdGljTVNCdWlsZCE=",
   "Content-Type": "application/json",
