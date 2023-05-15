@@ -1,7 +1,7 @@
 import { Avatar } from "./avatar";
 import { FeedbackControl } from "./FeedbackControl/feedback_control";
 
-export const Summary = () => {
+export const Summary = ({ text, loading }) => {
   const styles = {
     header: {
       display: "flex",
@@ -16,6 +16,10 @@ export const Summary = () => {
         <Avatar></Avatar>
         <FeedbackControl></FeedbackControl>
       </header>
+      <div className="text-lg leading-normal text-gray-800">
+        {loading && <div>loading...</div>}
+        {text}
+      </div>
     </>
   );
 };

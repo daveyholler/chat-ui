@@ -34,5 +34,6 @@ module.exports = {
         endOfLine: 'auto',
       },
     ],
+    "@typescript-eslint/no-empty-interface": "off",
   },
 };

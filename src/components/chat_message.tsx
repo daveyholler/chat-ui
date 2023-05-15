@@ -55,17 +55,7 @@ export const ChatMessage: React.FC<ChatMessageType> = ({
     <>
       <div style={styles.wrapper}>
         {!isHuman && (
-          <img
-            style={{
-              borderRadius: "8px",
-              boxShadow:
-                "0px 1px 5px rgba(0, 0, 0, 0.1), 0px 3.6px 13px rgba(0, 0, 0, 0.07), 0px 8.4px 23px rgba(0, 0, 0, 0.06), 0px 23px 35px rgba(0, 0, 0, 0.05), inset 0px 4px 4px rgba(255, 255, 255, 0.65)",
-            }}
-            width={32}
-            height={32}
-            src={Avatar}
-            alt=""
-          />
+          <img src={Avatar} alt="" className="w-10 h-10 ring-2 ring-white" />
         )}
         <div style={styles.message}>
           <span style={styles.messageContent}>{content}</span>
