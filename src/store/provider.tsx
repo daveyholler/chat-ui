@@ -51,6 +51,8 @@ const globalReducer = (state, action): GlobalStateType => {
       return { ...state, inProgressMessage: action.payload.inProgressMessage };
     case "SET_FILTERS":
       return { ...state, filters: action.payload.filters };
+    case "RESET":
+      return { ...GLOBAL_STATE };
     default:
       return state;
   }
@@ -72,14 +74,18 @@ export const GlobalStateProvider = ({ children }) => {
     ...state,
     reset: () => {
       dispatch({
-        type: "SET_SEARCH_RESPONSE",
-        payload: { searchResponse: null },
+        type: "RESET"
       });
     },
     search: async (query, filters) => {
       dispatch({ type: "SET_LOADING", payload: { loading: true } });
       dispatch({ type: "SET_QUERY", payload: { query } });
       dispatch({ type: "SET_FILTERS", payload: { filters } });
+
+      dispatch({
+        type: "SET_IN_PROGRESS_MESSAGE",
+        payload: { inProgressMessage: true },
+      });
 
       const response = await fetch(`${API_HOST}/search`, {
         method: "POST",
@@ -100,11 +106,6 @@ export const GlobalStateProvider = ({ children }) => {
       dispatch({ type: "SET_LOADING", payload: { loading: false } });
 
       let message = "";
-
-      dispatch({
-        type: "SET_IN_PROGRESS_MESSAGE",
-        payload: { inProgressMessage: true },
-      });
 
       await fetchEventSource(`${API_HOST}/completions`, {
         method: "POST",

@@ -7,6 +7,7 @@ import SearchInput from "./components/chat/search_input";
 import { SearchResponse } from "./types";
 import { GlobalState } from "./store/provider";
 import { cn } from "./lib/utils";
+import { BeatLoader } from "react-spinners";
 
 function Results({ searchResponse }: { searchResponse: SearchResponse }) {
   const api = useContext(GlobalState);
@@ -104,10 +105,14 @@ function App() {
   return (
     <div className="p-8">
       <div className="max-w-2xl mx-auto">
-        <SearchInput onSearch={onSearch} />
+        <SearchInput onSearch={onSearch} searchActive={api?.searchResponse} />
       </div>
 
-      {api?.loading && <div className="max-w-2xl mx-auto">loading...</div>}
+      {api?.loading && !api?.searchResponse && (
+        <div className="relative w-24 mx-auto py-10 opacity-30">
+          <BeatLoader size={15} />
+        </div>
+      )}
 
       {api?.searchResponse && <Results searchResponse={api?.searchResponse} />}
     </div>
