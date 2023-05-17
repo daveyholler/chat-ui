@@ -17,6 +17,7 @@ export interface Result {
   id: string;
   category: [string];
   content: [string];
+  summary: [string];
   name: [string];
   url: [string];
 }

@@ -106,7 +106,7 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
                 <h4 className="text-md mb-1 font-semibold">{result.name[0]}</h4>
               </div>
               <p className="text-sm mb-2 text-light-ink">
-                {result.content[0].slice(0, 200)}
+                {result.summary[0]}
               </p>
               <a
                 href={result.url[0]}

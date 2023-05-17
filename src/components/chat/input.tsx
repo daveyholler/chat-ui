@@ -26,8 +26,7 @@ export default function ChatInput({ isLoading, onSubmit }) {
 
         onSubmit(message);
         setMessage("");
-
-        autosize.destroy(textareaReference?.current);
+        autosize.destroy(textareaReference.current);
       }
     },
     [message, onSubmit]
@@ -52,17 +51,17 @@ export default function ChatInput({ isLoading, onSubmit }) {
   }, []);
 
   return (
-    <form
-      onSubmit={(e) => e.preventDefault()}
-      className="flex space-x-2 relative"
-    >
+    <form className="flex space-x-2 relative">
       <textarea
         className="w-full h-10 p-2 border border-smoke rounded-md bg-gray-50 focus:bg-white pl-9"
         ref={textareaReference}
         value={message}
         placeholder="Ask a follow up question about this answer"
         onKeyDown={handleKeyDown}
-        onChange={(event) => setMessage(event.target.value)}
+        onChange={(event) => {
+          autosize(textareaReference.current);
+          setMessage(event.target.value);
+        }}
       ></textarea>
       <span className="absolute left-1 top-3">
         <Conversation />
@@ -79,6 +78,7 @@ export default function ChatInput({ isLoading, onSubmit }) {
           <SendIcon />
         </span>
       </button>
+
     </form>
   );
 }

@@ -15,7 +15,7 @@ export const Summary = ({
   sources: SourceType[];
 }) => {
   return (
-    <>
+    <div className="mb-4">
       <header className="flex flex-row justify-between mb-8">
         <div className="flex flex-row justify-center align-middle items-center">
           <div className="flex flex-col justify-start">
@@ -35,7 +35,7 @@ export const Summary = ({
       <div className="text-base leading-tight text-gray-800 whitespace-pre-wrap mb-8">
         {text}
       </div>
-      <Sources showDisclaimer sources={sources} />
-    </>
+      <Sources sources={sources}/>
+    </div>
   );
 };
