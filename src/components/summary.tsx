@@ -3,6 +3,7 @@ import { FeedbackControl } from "./FeedbackControl/feedback_control";
 import { BeatLoader } from "react-spinners";
 import { SourceItem, SourceType } from "./source_item";
 import { Result } from "../types";
+import Sources from "./sources";
 
 export const Summary = ({
   text,
@@ -29,9 +30,7 @@ export const Summary = ({
       <div className="text-base leading-tight text-gray-800 whitespace-pre-wrap mb-8">
         {text}
       </div>
-      {sources.map((source) => (
-        <SourceItem name={source.name} icon={source.icon} href={source.href} />
-      ))}
+      <Sources sources={sources}/>
     </>
   );
 };

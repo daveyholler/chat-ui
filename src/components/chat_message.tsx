@@ -2,6 +2,7 @@
 // @ts-ignore
 import Avatar from "./images/robot-avatar.png";
 import { SourceItem, SourceType } from "./source_item";
+import Sources from "./sources";
 
 export type ChatMessageType = {
   id: number | string;
@@ -61,13 +62,12 @@ export const ChatMessage: React.FC<ChatMessageType> = ({
           </span>
         </div>
       </div>
-      <div style={styles.sourceList as React.CSSProperties}>
-        {sources &&
-          sources.length >= 1 &&
-          sources.map((src, index) => (
-            <SourceItem key={index} name={src.name} icon={src.icon} href={src.href} />
-          ))}
-      </div>
+      {sources && (
+        <div className="mt-6 ml-14">
+          <Sources sources={sources || []}/>
+        </div>
+      )}
+
     </>
   );
 };

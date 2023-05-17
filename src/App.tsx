@@ -14,6 +14,7 @@ import {
 } from "./store/provider";
 import { cn } from "./lib/utils";
 import { BeatLoader } from "react-spinners";
+import { Header } from "./components/header";
 
 function Results({ searchResponse }: { searchResponse: SearchResponse }) {
   const conversation = useAppSelector((state) => state.conversation);
@@ -32,9 +33,10 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
     <>
       <div className="max-w-2xl mx-auto relative">
         <div className="flex">
-          <div className="absolute -left-48 top-4">
+          <div className="absolute -left-60 top-4">
             {searchResponse.facets.map((facet) => (
-              <div className="w-44" key={facet.name}>
+              <div className="w-48" key={facet.name}>
+                <h4 className="text-base font-bold leading-normal mb-2">Filter results by source</h4>
                 <div className="facet__entries">
                   {facet.entries.map((entry) => (
                     <div
@@ -67,7 +69,7 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
           </div>
         </div>
         <div className="bg-white shadow-xl mt-4 p-6 rounded-xl border border-gray-200 mb-8">
-          <div className="pb-10">
+          <div className="mb-4">
             <Summary
               text={summary?.content || streamMessage}
               loading={!!inProgressMessage}
@@ -99,7 +101,8 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
               key={result.id}
             >
               <h4 className="text-md mb-1 font-semibold">{result.name[0]}</h4>
-              <p className="text-sm">{result.content[0]}</p>
+              <p className="text-sm mb-2">{result.content[0].slice(0, 200)}</p>
+              <a href={result.url[0]} className="text-sm text-blue-500 underline">View document</a>
             </div>
           ))}
         </div>
@@ -119,6 +122,8 @@ function App() {
   };
 
   return (
+    <>
+    <Header />
     <div className="p-8">
       <div className="max-w-2xl mx-auto">
         <SearchInput onSearch={onSearch} searchActive={searchResponse} />
@@ -132,6 +137,7 @@ function App() {
 
       {searchResponse && <Results searchResponse={searchResponse} />}
     </div>
+    </>
   );
 }
 

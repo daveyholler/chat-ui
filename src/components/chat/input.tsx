@@ -1,5 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import autosize from "autosize";
+import { cn } from "../../lib/utils";
+import Conversation from "../images/conversation";
+import SendIcon from "../images/SendIcon";
 
 export default function ChatInput({ isLoading, onSubmit }) {
   const [message, setMessage] = useState<string>();
@@ -7,14 +10,13 @@ export default function ChatInput({ isLoading, onSubmit }) {
 
   const handleKeyDown = useCallback(
     (event) => {
-      if (event.keyCode === 13 && !event.shiftKey) {
+      if (event.keyCode === 13 && !event.shiftKey && message && message.trim().length > 0) {
         event.preventDefault();
 
         onSubmit(message);
         setMessage("");
 
         autosize.destroy(textareaReference?.current);
-
       }
     },
     [message, onSubmit]
@@ -28,7 +30,7 @@ export default function ChatInput({ isLoading, onSubmit }) {
     }
   }, [isLoading]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const ref = textareaReference?.current;
 
     autosize(ref);
@@ -39,19 +41,25 @@ export default function ChatInput({ isLoading, onSubmit }) {
   }, []);
 
   return (
-    <div>
-      <div>
-        <div>
-          <textarea
-            className="w-full min-h-6 p-2 border border-gray-300 rounded-md"
-            ref={textareaReference}
-            value={message}
-            placeholder="Send a message"
-            onKeyDown={handleKeyDown}
-            onChange={(event) => setMessage(event.target.value)}
-          ></textarea>
-        </div>
-      </div>
-    </div>
+    <form onSubmit={(e) => e.preventDefault()} className="flex space-x-2 relative">
+      <textarea
+        className="w-full h-10 p-2 border border-gray-300 rounded-md bg-gray-50 focus:bg-white pl-9"
+        ref={textareaReference}
+        value={message}
+        placeholder="Ask a follow up question about this answer"
+        onKeyDown={handleKeyDown}
+        onChange={(event) => setMessage(event.target.value)}
+      ></textarea>
+      <span className="absolute left-1 top-3"><Conversation /></span>
+      <button
+        disabled={!message || message?.length === 0}
+        type="submit"
+        className={cn(
+          "bg-blue-400 text-white px-4 py-2 h-10 rounded-md border border-blue-300 disabled:opacity-30 cursor-pointer inline-flex"
+        )}
+      >Send <span className="ml-3"><SendIcon /></span>
+      </button>
+
+    </form>
   );
 }
