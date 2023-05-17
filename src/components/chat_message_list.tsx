@@ -6,10 +6,10 @@ type ChatMessageListType = {
 };
 export const ChatMessageList: React.FC<ChatMessageListType> = ({
   messages,
-  incomingMessage
+  incomingMessage,
 }) => {
   return (
-    <div className="w-full mb-8">
+    <div className="w-full mb-8 overflow-y-scroll max-h-96 pb-5 px-5 overflow-x-visible">
       {messages.map((msg) => (
         <ChatMessage
           key={msg.id}
