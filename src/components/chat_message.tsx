@@ -35,11 +35,6 @@ export const ChatMessage: React.FC<ChatMessageType> = ({
       borderRadius: "12px",
     },
     messageContent: {
-      fontFamily: "Inter",
-      fontStyle: "normal",
-      fontWeight: 500,
-      fontSize: "16px",
-      lineHeight: "20px",
       color: isHuman ? "#000000" : "#1C1E23",
       textShadow: isHuman ? "0px 1px 0px #38C2B4" : "0px 1px 0px #FFFFFF",
     },
@@ -58,14 +53,19 @@ export const ChatMessage: React.FC<ChatMessageType> = ({
           <img src={Avatar} alt="" className="w-10 h-10 ring-2 ring-white" />
         )}
         <div style={styles.message}>
-          <span style={styles.messageContent}>{content}</span>
+          <span
+            style={styles.messageContent}
+            className="whitespace-pre-wrap leading-normal"
+          >
+            {content}
+          </span>
         </div>
       </div>
       <div style={styles.sourceList as React.CSSProperties}>
         {sources &&
           sources.length >= 1 &&
           sources.map((src, index) => (
-            <SourceItem key={index} name={src.name} icon={src.icon} />
+            <SourceItem key={index} name={src.name} icon={src.icon} href={src.href} />
           ))}
       </div>
     </>

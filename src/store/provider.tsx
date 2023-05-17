@@ -1,7 +1,8 @@
-import { useReducer, createContext } from "react";
+import { useReducer,  createContext } from "react";
 import { SearchResponse } from "../types";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { ChatMessageType } from "../components/chat_message";
+import { SourceType } from "../components/source_item";
 
 // Define the initial state
 type GlobalStateType = {
@@ -24,7 +25,7 @@ const GLOBAL_STATE: GlobalStateType = {
   inProgressMessage: false,
 };
 
-// const API_HOST = "http://127.0.0.1:4000";
+// const API_HOST = "http://127.0.0.1:5000/api";
 const API_HOST =
   "https://workplace-search-openai-20-app.staging-3.eden.elastic.dev/api";
 const defaultHeaders = {
@@ -40,6 +41,11 @@ const globalReducer = (state, action): GlobalStateType => {
       return {
         ...state,
         conversation: [...state.conversation, action.payload.conversation],
+      };
+    case "RESET_CONVERSATION":
+      return {
+        ...state,
+        conversation: [],
       };
     case "SET_SEARCH_RESPONSE":
       return { ...state, searchResponse: action.payload.searchResponse };
@@ -59,11 +65,18 @@ const globalReducer = (state, action): GlobalStateType => {
 };
 // Create the context
 interface API extends GlobalStateType {
-  search: (query: string, filters: string[]) => void;
+  search: (query: string, filters: string[], isConvo?: boolean) => void;
   reset: () => void;
   askQuestion: (query: string) => void;
   toggleFilter: (filter: string, value: string) => void;
   isSelected: (filter: string, value: string) => boolean;
+}
+
+function hasStartedConversation(
+  conversations: GlobalStateType["conversation"]
+) {
+  // first conversation is always the summary
+  return conversations.length > 1;
 }
 
 export const GlobalState = createContext<API | null>(null);
@@ -74,10 +87,10 @@ export const GlobalStateProvider = ({ children }) => {
     ...state,
     reset: () => {
       dispatch({
-        type: "RESET"
+        type: "RESET",
       });
     },
-    search: async (query, filters) => {
+    search: async (query, filters, isConvo = false) => {
       dispatch({ type: "SET_LOADING", payload: { loading: true } });
       dispatch({ type: "SET_QUERY", payload: { query } });
       dispatch({ type: "SET_FILTERS", payload: { filters } });
@@ -86,6 +99,12 @@ export const GlobalStateProvider = ({ children }) => {
         type: "SET_IN_PROGRESS_MESSAGE",
         payload: { inProgressMessage: true },
       });
+
+      if (!isConvo) {
+        dispatch({
+          type: "RESET_CONVERSATION",
+        });
+      }
 
       const response = await fetch(`${API_HOST}/search`, {
         method: "POST",
@@ -129,6 +148,13 @@ export const GlobalStateProvider = ({ children }) => {
                   isHuman: false,
                   content: message + "",
                   id: state.conversation.length + 1,
+                  sources: [
+                    {
+                      icon: "pdf",
+                      name: searchResponse.results[0].name[0],
+                      href: searchResponse.results[0].url[0],
+                    },
+                  ] as SourceType[],
                 },
               },
             });
@@ -158,7 +184,7 @@ export const GlobalStateProvider = ({ children }) => {
         },
       });
 
-      await api.search(query, state.filters);
+      await api.search(query, state.filters, true);
     },
     toggleFilter: async (filter: string, value: string) => {
       let stateFilters = {
@@ -172,23 +198,24 @@ export const GlobalStateProvider = ({ children }) => {
         ? stateFilters[filter].filter((f) => f === filter)
         : stateFilters[filter].concat(value);
 
-        debugger
-
       stateFilters = {
         ...stateFilters,
         [filter]: filterValues,
       };
 
-      dispatch({
-        type: "ADD_CONVERSATION",
-        payload: {
-          conversation: {
-            isHuman: true,
-            content: filterExists ? `Removing ${value}` : `Adding ${value}`,
-            id: state.conversation.length + 1,
+      if (hasStartedConversation(state.conversation)) {
+        // add a message to the conversation that we are adding/removing a filter
+        dispatch({
+          type: "ADD_CONVERSATION",
+          payload: {
+            conversation: {
+              isHuman: true,
+              content: filterExists ? `Removing ${value}` : `Adding ${value}`,
+              id: state.conversation.length + 1,
+            },
           },
-        },
-      });
+        });
+      }
 
       dispatch({
         type: "SET_FILTERS",

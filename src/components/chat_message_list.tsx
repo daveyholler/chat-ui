@@ -9,7 +9,7 @@ export const ChatMessageList: React.FC<ChatMessageListType> = ({
   incomingMessage
 }) => {
   return (
-    <div className="w-full">
+    <div className="w-full mb-8">
       {messages.map((msg) => (
         <ChatMessage
           key={msg.id}

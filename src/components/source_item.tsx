@@ -5,7 +5,7 @@ import { SourceIcon, SourceIconType } from "./source_icon";
 export type SourceType = {
   name: string;
   icon: any;
-  href?: string;
+  href: string;
 };
 
 export const SourceItem: React.FC<SourceType> = ({ name, icon, href }) => {
@@ -13,9 +13,7 @@ export const SourceItem: React.FC<SourceType> = ({ name, icon, href }) => {
     wrapper: {
       background: "linear-gradient(180deg, #F7F9FC 0%, #F1F4FA 100%)",
       display: "inline-flex",
-      alignItems: "center",
       padding: "8px 12px 8px 8px",
-      gap: "8px",
       height: "40px",
       left: "44px",
       top: "53px",
@@ -38,8 +36,10 @@ export const SourceItem: React.FC<SourceType> = ({ name, icon, href }) => {
   };
   return (
     <div className="sourceItem" style={styles.wrapper}>
-      <SourceIcon icon={icon} />
-      <span style={styles.label}>{name}</span>
+      <a href={href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2">
+        <SourceIcon icon={icon} />
+        <span style={styles.label}>{name}</span>
+      </a>
     </div>
   );
 };

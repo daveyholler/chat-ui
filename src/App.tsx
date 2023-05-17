@@ -57,7 +57,8 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
           <div className="pb-10">
             <Summary
               text={summary?.content || api?.streamMessage}
-              loading={api?.inProgressMessage}
+              loading={!!api?.inProgressMessage}
+              sources={api?.streamMessage ? [] : summary?.sources || []}
             />
           </div>
 
