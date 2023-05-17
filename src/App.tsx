@@ -10,11 +10,12 @@ import {
   isFacetSelected,
   thunkActions,
   useAppDispatch,
-  useAppSelector
+  useAppSelector,
 } from "./store/provider";
 import { cn } from "./lib/utils";
 import { BeatLoader } from "react-spinners";
 import { Header } from "./components/header";
+import { SourceIcon } from "./components/source_icon";
 
 function Results({ searchResponse }: { searchResponse: SearchResponse }) {
   const conversation = useAppSelector((state) => state.conversation);
@@ -36,7 +37,9 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
           <div className="absolute -left-60 top-4">
             {searchResponse.facets.map((facet) => (
               <div className="w-48" key={facet.name}>
-                <h4 className="text-base font-bold leading-normal mb-2">Filter results by source</h4>
+                <h4 className="text-base font-bold leading-normal mb-2">
+                  Filter results by source
+                </h4>
                 <div className="facet__entries">
                   {facet.entries.map((entry) => (
                     <div
@@ -68,7 +71,7 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
             ))}
           </div>
         </div>
-        <div className="bg-white shadow-xl mt-4 p-6 rounded-xl border border-gray-200 mb-8">
+        <div className="bg-white shadow-xl mt-4 p-6 rounded-xl border border-light-fog mb-8">
           <div className="mb-4">
             <Summary
               text={summary?.content || streamMessage}
@@ -78,7 +81,7 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
           </div>
 
           <div
-            className={cn("chat border-t border-gray-300", {
+            className={cn("chat border-t border-fog", {
               "border-0": chatMessages.length === 0,
             })}
           >
@@ -91,18 +94,26 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
             <ChatInput isLoading={inProgressMessage} onSubmit={onSubmit} />
           </div>
         </div>
-        <h3 className="text-lg mb-4 font-bold">
-          Search Results
-        </h3>
+        <h3 className="text-lg mb-4 font-bold">Supporting search results</h3>
         <div className="">
           {searchResponse?.results.map((result) => (
             <div
-              className="bg-white border border-gray-200 mb-4 p-4 rounded-md shadow-md"
+              className="bg-white border border-light-fog mb-4 p-4 rounded-xl shadow-md"
               key={result.id}
             >
-              <h4 className="text-md mb-1 font-semibold">{result.name[0]}</h4>
-              <p className="text-sm mb-2">{result.content[0].slice(0, 200)}</p>
-              <a href={result.url[0]} className="text-sm text-blue-500 underline">View document</a>
+              <div className="flex flex-row space-x-1.5 pb-2">
+                <SourceIcon icon={result.category[0].replace(" ", "_")} />
+                <h4 className="text-md mb-1 font-semibold">{result.name[0]}</h4>
+              </div>
+              <p className="text-sm mb-2 text-light-ink">
+                {result.content[0].slice(0, 200)}
+              </p>
+              <a
+                href={result.url[0]}
+                className="text-sm text-dark-blue underline"
+              >
+                View document
+              </a>
             </div>
           ))}
         </div>
@@ -123,20 +134,20 @@ function App() {
 
   return (
     <>
-    <Header />
-    <div className="p-8">
-      <div className="max-w-2xl mx-auto">
-        <SearchInput onSearch={onSearch} searchActive={searchResponse} />
-      </div>
-
-      {loading && !searchResponse && (
-        <div className="relative w-24 mx-auto py-10 opacity-30">
-          <BeatLoader size={15} />
+      <Header />
+      <div className="p-8">
+        <div className="max-w-2xl mx-auto">
+          <SearchInput onSearch={onSearch} searchActive={searchResponse} />
         </div>
-      )}
 
-      {searchResponse && <Results searchResponse={searchResponse} />}
-    </div>
+        {loading && !searchResponse && (
+          <div className="relative w-24 mx-auto py-10 opacity-30">
+            <BeatLoader size={15} />
+          </div>
+        )}
+
+        {searchResponse && <Results searchResponse={searchResponse} />}
+      </div>
     </>
   );
 }

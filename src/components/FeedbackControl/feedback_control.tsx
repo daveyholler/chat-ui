@@ -9,7 +9,7 @@ import { Bug } from "../images/bug";
 export const FeedbackControl = () => {
   const [selected, setSelected] = useState<number | undefined>(undefined);
 
-  const buttons: any[] = ["smile", "neutral", "disappointed", "bug"];
+  const buttons: any[] = ["smile", "disappointed", "bug"];
   interface ButtonProps {
     icon: string;
     onClick: any;
@@ -22,7 +22,6 @@ export const FeedbackControl = () => {
       }`}
     >
       {icon === "smile" && <Smile />}
-      {icon === "neutral" && <Neutral />}
       {icon === "disappointed" && <Disappointed />}
       {icon === "bug" && <Bug />}
     </button>

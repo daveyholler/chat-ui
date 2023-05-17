@@ -1,14 +1,24 @@
-import { SourceItem, SourceType } from "./source_item"
+import { SourceItem, SourceType } from "./source_item";
 
-export default ({ sources }: { sources: SourceType[]}) => {
-  return sources.length > 0 && (
+export type SourcesType = {
+  sources: SourceType[];
+  showDisclaimer?: boolean;
+};
+export const Sources: React.FC<SourcesType> = ({ sources, showDisclaimer }) => {
+  return (
+    (sources.length > 0 && (
       <>
-        <h5 className="text-sm font-bold tracking-wide leading-normal text-gray-900 uppercase mb-2">
-          Sources
-        </h5>
+        {showDisclaimer && (
+          <h5 className="text-xs font-medium tracking-normal leading-normal uppercase text-lighter-ink mb-3">
+            The answer was formed from
+            <br />
+            information found in this document
+          </h5>
+        )}
         <div className="flex space-x-2">
           {sources.map((source) => (
             <SourceItem
+              key={source.name}
               name={source.name}
               icon={source.icon}
               href={source.href}
@@ -16,5 +26,7 @@ export default ({ sources }: { sources: SourceType[]}) => {
           ))}
         </div>
       </>
-    ) || null
-}
+    )) ||
+    null
+  );
+};

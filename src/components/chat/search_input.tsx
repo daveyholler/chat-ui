@@ -17,23 +17,29 @@ export default function SearchInput({ onSearch, searchActive }) {
       <label className="text-xs font-bold leading-none text-gray-900">
         Search everything
       </label>
-      <div className="flex w-full items-center space-x-2 mt-1 relative">
+      <div className="relative mt-1 flex w-full items-center space-x-2">
         <input
           type="text"
-          className="outline-none border border-gray-300 rounded-md pl-10 px-3 py-2 w-full text-base font-medium placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full rounded-md border border-light-smoke px-3 py-2.5 pl-10 text-base font-medium outline-none placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-blue-500"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="search"
+          placeholder="Ask your question here"
         />
-        <span className="absolute left-2 pointer-events-none"><SearchIcon /></span>
+        <span className="pointer-events-none absolute left-2">
+          <SearchIcon />
+        </span>
         <button
           className={cn(
-            "w-36 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 h-10 py-2 px-4 min-w-fit",
-            "bg-primary text-primary-foreground hover:bg-primary/90 opacity-100 bg-blue-700 text-white"
-            )}
+            "flex flex-row bg-dark-blue text-light-fog py-2.5 w-48 rounded-md font-medium flex-row items-center justify-center"
+          )}
           type="submit"
         >
-          {searchActive && <span className="mr-2"><Reload /></span>} {searchActive ? "Start over" : "Search"}
+          {searchActive && (
+            <span className="mr-2">
+              <Reload />
+            </span>
+          )}{" "}
+          {searchActive ? "Start over" : "Search"}
         </button>
       </div>
     </form>

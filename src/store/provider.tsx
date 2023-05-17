@@ -140,23 +140,25 @@ export const thunkActions = {
           } else {
             const results = searchResponse.results.slice(0, 3);
 
-            const action = hasStartedConversation(getState()) ? actions.addConversation : actions.setConversation
-              dispatch(
-                action({
-                  conversation: {
-                    isHuman: false,
-                    content: message + "",
-                    id: getState().conversation.length + 1,
-                    sources: results.map(
-                      (result): SourceType => ({
-                        icon: "pdf",
-                        name: result.name[0],
-                        href: result.url[0],
-                      })
-                    ),
-                  },
-                })
-              );
+            const action = hasStartedConversation(getState())
+              ? actions.addConversation
+              : actions.setConversation;
+            dispatch(
+              action({
+                conversation: {
+                  isHuman: false,
+                  content: message + "",
+                  id: getState().conversation.length + 1,
+                  sources: results.splice(0, 1).map(
+                    (result): SourceType => ({
+                      icon: result.category[0].replace(" ", "_"),
+                      name: result.name[0],
+                      href: result.url[0],
+                    })
+                  ),
+                },
+              })
+            );
 
             dispatch(actions.setStreamMessage({ streamMessage: null }));
 
@@ -208,7 +210,9 @@ export const thunkActions = {
           actions.addConversation({
             conversation: {
               isHuman: true,
-              content: filterExists ? `Removing ${value}` : `Adding ${value}`,
+              content: filterExists
+                ? `Please exclude sources from ${value}`
+                : `Please include sources from ${value}`,
               id: state.conversation.length + 1,
             },
           })
