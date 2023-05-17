@@ -78,7 +78,6 @@ export default function ChatInput({ isLoading, onSubmit }) {
           <SendIcon />
         </span>
       </button>
-
     </form>
   );
 }

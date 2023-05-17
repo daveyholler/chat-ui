@@ -35,7 +35,7 @@ export const Summary = ({
       <div className="text-base leading-tight text-gray-800 whitespace-pre-wrap mb-8">
         {text}
       </div>
-      <Sources sources={sources}/>
+      <Sources showDisclaimer sources={sources} />
     </div>
   );
 };
