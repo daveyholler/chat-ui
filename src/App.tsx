@@ -1,22 +1,32 @@
-import React, { useContext } from "react";
+import React from "react";
 import ChatInput from "./components/chat/input";
 
 import { ChatMessageList } from "./components/chat_message_list";
 import { Summary } from "./components/summary";
 import SearchInput from "./components/chat/search_input";
 import { SearchResponse } from "./types";
-import { GlobalState } from "./store/provider";
+import {
+  actions,
+  isFacetSelected,
+  thunkActions,
+  useAppDispatch,
+  useAppSelector
+} from "./store/provider";
 import { cn } from "./lib/utils";
 import { BeatLoader } from "react-spinners";
 
 function Results({ searchResponse }: { searchResponse: SearchResponse }) {
-  const api = useContext(GlobalState);
+  const conversation = useAppSelector((state) => state.conversation);
+  const streamMessage = useAppSelector((state) => state.streamMessage);
+  const inProgressMessage = useAppSelector((state) => state.inProgressMessage);
+  const filters = useAppSelector((state) => state.filters);
+  const dispatch = useAppDispatch();
 
   const onSubmit = (query) => {
-    api?.askQuestion(query);
+    dispatch(thunkActions.askQuestion(query));
   };
 
-  const [summary, ...chatMessages] = api?.conversation || [];
+  const [summary, ...chatMessages] = conversation;
 
   return (
     <>
@@ -31,7 +41,8 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
                       className={cn(
                         "flex mb-0 content-center justify-between py-1 cursor-pointer hover:text-blue-700",
                         {
-                          "text-blue-500 font-semibold": api?.isSelected(
+                          "text-blue-500 font-semibold": isFacetSelected(
+                            filters,
                             facet.name,
                             entry.value
                           ),
@@ -39,7 +50,9 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
                       )}
                       key={entry.value}
                       onClick={() => {
-                        api?.toggleFilter(facet.name, entry.value);
+                        dispatch(
+                          thunkActions.toggleFilter(facet.name, entry.value)
+                        );
                       }}
                     >
                       <span className="flex-grow text-sm">{entry.value}</span>
@@ -56,9 +69,9 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
         <div className="bg-white shadow-xl mt-4 p-6 rounded-xl border border-gray-200 mb-8">
           <div className="pb-10">
             <Summary
-              text={summary?.content || api?.streamMessage}
-              loading={!!api?.inProgressMessage}
-              sources={api?.streamMessage ? [] : summary?.sources || []}
+              text={summary?.content || streamMessage}
+              loading={!!inProgressMessage}
+              sources={streamMessage ? [] : summary?.sources || []}
             />
           </div>
 
@@ -70,17 +83,17 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
             <div className="chat__messages">
               <ChatMessageList
                 messages={chatMessages}
-                incomingMessage={(summary && api?.streamMessage) || null}
+                incomingMessage={(summary && streamMessage) || null}
               />
             </div>
-            <ChatInput isLoading={api?.inProgressMessage} onSubmit={onSubmit} />
+            <ChatInput isLoading={inProgressMessage} onSubmit={onSubmit} />
           </div>
         </div>
         <h3 className="text-lg mb-4 font-bold">
-          Search Results ({searchResponse.total})
+          Search Results
         </h3>
         <div className="">
-          {api?.searchResponse?.results.map((result) => (
+          {searchResponse?.results.map((result) => (
             <div
               className="bg-white border border-gray-200 mb-4 p-4 rounded-md shadow-md"
               key={result.id}
@@ -96,26 +109,28 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
 }
 
 function App() {
-  const api = useContext(GlobalState);
+  const dispatch = useAppDispatch();
+  const searchResponse = useAppSelector((state) => state.searchResponse);
+  const loading = useAppSelector((state) => state.loading);
 
   const onSearch = (query) => {
-    api?.reset();
-    api?.search(query, []);
+    dispatch(actions.reset());
+    dispatch(thunkActions.search(query, []));
   };
 
   return (
     <div className="p-8">
       <div className="max-w-2xl mx-auto">
-        <SearchInput onSearch={onSearch} searchActive={api?.searchResponse} />
+        <SearchInput onSearch={onSearch} searchActive={searchResponse} />
       </div>
 
-      {api?.loading && !api?.searchResponse && (
+      {loading && !searchResponse && (
         <div className="relative w-24 mx-auto py-10 opacity-30">
           <BeatLoader size={15} />
         </div>
       )}
 
-      {api?.searchResponse && <Results searchResponse={api?.searchResponse} />}
+      {searchResponse && <Results searchResponse={searchResponse} />}
     </div>
   );
 }

@@ -9,7 +9,6 @@ export interface Facet {
 export interface SearchResponse {
   results: Result[];
   facets: Facet[];
-  total: number;
   streaming_id: string;
   conversation_id: string;
 }
