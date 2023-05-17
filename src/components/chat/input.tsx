@@ -15,9 +15,8 @@ export default function ChatInput({ isLoading, onSubmit }) {
 
         onSubmit(message);
         setMessage("");
-
+        autosize.destroy(textareaReference.current);
       }
-      autosize.destroy(textareaReference.current);
 
     },
     [message, onSubmit]
