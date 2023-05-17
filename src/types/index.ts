@@ -16,6 +16,7 @@ export interface SearchResponse {
 export interface Result {
   id: string;
   content: [string];
+  summary: [string];
   name: [string];
   url: [string];
 }

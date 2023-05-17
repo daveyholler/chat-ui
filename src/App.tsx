@@ -78,7 +78,7 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
           </div>
 
           <div
-            className={cn("chat border-t border-gray-300", {
+            className={cn("chat border-t border-gray-300 mt-8", {
               "border-0": chatMessages.length === 0,
             })}
           >
@@ -101,7 +101,7 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
               key={result.id}
             >
               <h4 className="text-md mb-1 font-semibold">{result.name[0]}</h4>
-              <p className="text-sm mb-2">{result.content[0].slice(0, 200)}</p>
+              <p className="text-sm mb-2">{result.summary[0]}</p>
               <a href={result.url[0]} className="text-sm text-blue-500 underline">View document</a>
             </div>
           ))}

@@ -15,7 +15,7 @@ export const Summary = ({
   sources: SourceType[];
 }) => {
   return (
-    <>
+    <div className="mb-4">
       <header className="flex flex-row justify-between mb-8">
         <div className="flex flex-row justify-center align-middle items-center">
           <Avatar></Avatar>
@@ -31,6 +31,6 @@ export const Summary = ({
         {text}
       </div>
       <Sources sources={sources}/>
-    </>
+    </div>
   );
 };
