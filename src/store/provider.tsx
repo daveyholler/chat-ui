@@ -1,4 +1,4 @@
-import { SearchResponse } from "../types";
+import { Result, SearchResponse } from "../types";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { ChatMessageType } from "../components/chat_message";
 import { SourceType } from "../components/source_item";
@@ -139,7 +139,20 @@ export const thunkActions = {
             message += event.data === "" ? `${event.data} \n` : event.data;
             dispatch(actions.setStreamMessage({ streamMessage: message }));
           } else {
-            const results = searchResponse.results.slice(0, 3);
+            const regex = /\*\*SOURCES:(.+)\*\*/;
+            const sourceReferences = message.match(regex);
+
+            let resultSourcesToAdd: Result[] = [];
+            if (sourceReferences) {
+              const sources = sourceReferences[1].split(",");
+              resultSourcesToAdd = sources
+                .map((sourceName) => {
+                  return searchResponse.results.find(
+                    (result) => result.name[0] === sourceName.trim()
+                  );
+                })
+                .filter((result): result is Result => result !== undefined);
+            }
 
             const action = hasStartedConversation(getState())
               ? actions.addConversation
@@ -148,9 +161,9 @@ export const thunkActions = {
               action({
                 conversation: {
                   isHuman: false,
-                  content: message + "",
+                  content: message.replace(regex, ""),
                   id: getState().conversation.length + 1,
-                  sources: results.splice(0, 1).map(
+                  sources: resultSourcesToAdd.map(
                     (result): SourceType => ({
                       icon: result.category[0].replace(" ", "_"),
                       name: result.name[0],
