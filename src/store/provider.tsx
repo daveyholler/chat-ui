@@ -16,6 +16,7 @@ type GlobalStateType = {
   streamMessage: string;
   conversation: ChatMessageType[];
   inProgressMessage: boolean;
+  userRole: "demo" | "manager";
 };
 
 const GLOBAL_STATE: GlobalStateType = {
@@ -26,6 +27,7 @@ const GLOBAL_STATE: GlobalStateType = {
   streamMessage: "",
   conversation: [],
   inProgressMessage: false,
+  userRole: "demo",
 };
 
 // const API_HOST = "http://127.0.0.1:5000/api";
@@ -74,6 +76,9 @@ const globalSlice = createSlice({
       state.streamMessage = "";
       state.conversation = [];
     },
+    setUserRole: (state, action) => {
+      state.userRole = action.payload.userRole;
+    },
   },
 });
 
@@ -102,6 +107,13 @@ export const isFacetSelected = (
 };
 
 export const thunkActions = {
+  setUserRole(userRole: "demo" | "manager") {
+    return async function setUserRole(dispatch, getState) {
+      dispatch(actions.reset());
+      dispatch(actions.setUserRole({ userRole }));
+      dispatch(thunkActions.search(getState().query, []));
+    };
+  },
   search: (query, filters) => {
     return async function fetchSearch(dispatch, getState) {
       dispatch(actions.setLoading({ loading: true }));
@@ -117,6 +129,7 @@ export const thunkActions = {
           query: query,
           filters: filters,
           conversation_id: getState().searchResponse?.conversation_id,
+          user: getState().userRole,
         }),
         headers: defaultHeaders,
       });
