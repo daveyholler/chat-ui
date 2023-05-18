@@ -109,6 +109,7 @@ export const thunkActions = {
       dispatch(actions.setFilters({ filters }));
 
       dispatch(actions.setInProgressMessage({ inProgressMessage: true }));
+      dispatch(actions.setStreamMessage({ streamMessage: "..." }));
 
       const response = await fetch(`${API_HOST}/search`, {
         method: "POST",

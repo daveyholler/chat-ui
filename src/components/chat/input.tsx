@@ -53,7 +53,7 @@ export default function ChatInput({ isLoading, onSubmit }) {
   return (
     <form className="flex space-x-2 relative">
       <textarea
-        className="w-full h-10 p-2 border border-smoke rounded-md bg-gray-50 focus:bg-white pl-9"
+        className="w-full h-10 p-2 border border-smoke rounded-md bg-gray-50 focus:bg-white pl-9 resize-none"
         ref={textareaReference}
         value={message}
         placeholder="Ask a follow up question about this answer"

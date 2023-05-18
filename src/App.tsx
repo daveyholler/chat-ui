@@ -74,9 +74,13 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
         <div className="bg-white shadow-xl mt-4 p-6 rounded-xl border border-light-fog mb-8">
           <div className="mb-4">
             <Summary
-              text={summary?.content || streamMessage}
-              loading={!!inProgressMessage}
-              sources={streamMessage ? [] : summary?.sources || []}
+              text={
+                chatMessages.length === 0
+                  ? streamMessage || summary?.content
+                  : summary?.content
+              }
+              loading={inProgressMessage}
+              sources={streamMessage && !summary ? [] : summary?.sources || []}
             />
           </div>
 
@@ -86,10 +90,10 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
             })}
           >
             <div className="chat__messages">
-              <ChatMessageList
-                messages={chatMessages}
-                incomingMessage={(summary && streamMessage) || null}
-              />
+                <ChatMessageList
+                  messages={chatMessages}
+                  incomingMessage={(summary && streamMessage) || null}
+                />
             </div>
             <ChatInput isLoading={inProgressMessage} onSubmit={onSubmit} />
           </div>
@@ -105,9 +109,7 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
                 <SourceIcon icon={result.category[0].replace(" ", "_")} />
                 <h4 className="text-md mb-1 font-semibold">{result.name[0]}</h4>
               </div>
-              <p className="text-sm mb-2 text-light-ink">
-                {result.summary[0]}
-              </p>
+              <p className="text-sm mb-2 text-light-ink">{result.summary[0]}</p>
               <a
                 href={result.url[0]}
                 className="text-sm text-dark-blue underline"
