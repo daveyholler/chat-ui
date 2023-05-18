@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ChatInput from "./components/chat/input";
 
 import { ChatMessageList } from "./components/chat_message_list";
@@ -90,10 +90,10 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
             })}
           >
             <div className="chat__messages">
-                <ChatMessageList
-                  messages={chatMessages}
-                  incomingMessage={(summary && streamMessage) || null}
-                />
+              <ChatMessageList
+                messages={chatMessages}
+                incomingMessage={(summary && streamMessage) || null}
+              />
             </div>
             <ChatInput isLoading={inProgressMessage} onSubmit={onSubmit} />
           </div>
@@ -127,7 +127,7 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
 function App() {
   const dispatch = useAppDispatch();
   const searchResponse = useAppSelector((state) => state.searchResponse);
-  const searchQuery = useAppSelector((state) => state.query);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const loading = useAppSelector((state) => state.loading);
 
   const onSearch = (query) => {
@@ -140,22 +140,24 @@ function App() {
     "What's the NASA sales team?",
     "Does the company own my personal project?",
     "What job openings do we have?",
-    "How does compensation works?"
-  ]
+    "How does compensation work?",
+  ];
 
   return (
     <>
       <Header />
       <div className="p-8">
         <div className="max-w-2xl mx-auto">
-          <SearchInput onSearch={onSearch} value={searchQuery} searchActive={searchResponse} />
+          <SearchInput
+            onSearch={onSearch}
+            value={searchQuery}
+            searchActive={searchResponse}
+          />
         </div>
 
         {!loading && !searchResponse && (
           <div className="text-left mt-20 w-96 mx-auto">
-            <h1 className="text-xl font-bold mb-4">
-              Ask a question about
-            </h1>
+            <h1 className="text-xl font-bold mb-4">Ask a question about</h1>
             <div className="flex flex-col space-y-4">
               {suggestedQueries.map((query) => (
                 <a
@@ -163,7 +165,7 @@ function App() {
                   className="text-lg text-dark-blue hover:text-blue-700"
                   onClick={(e) => {
                     e.preventDefault();
-
+                    setSearchQuery(query);
                     onSearch(query);
                   }}
                 >

@@ -2,7 +2,6 @@
 // @ts-ignore
 import elasticTypeMark from "./images/elasticTypeMark.png";
 import {
-  actions,
   thunkActions,
   useAppDispatch,
   useAppSelector,
@@ -26,7 +25,7 @@ export const Header = () => {
           value={userRole}
           className="bg-dark-ink text-light-fog font-medium flex-row items-center justify-center w-36 px-4 py-2 rounded-md focus:outline-none"
         >
-          <option value="demo">Demo</option>
+          <option value="demo">Engineer</option>
           <option value="manager">Manager</option>
         </select>
       </div>

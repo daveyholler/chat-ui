@@ -34,7 +34,7 @@ export default function SearchInput({ onSearch, searchActive, value }) {
         </span>
         <button
           className={cn(
-            "flex flex-row bg-dark-blue text-light-fog py-2.5 w-48 rounded-md font-medium flex-row items-center justify-center"
+            "flex flex-row bg-dark-blue text-light-fog py-2.5 w-48 rounded-md font-medium items-center justify-center"
           )}
           type="submit"
         >
