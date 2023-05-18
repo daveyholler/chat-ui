@@ -109,9 +109,11 @@ export const isFacetSelected = (
 export const thunkActions = {
   setUserRole(userRole: "demo" | "manager") {
     return async function setUserRole(dispatch, getState) {
-      dispatch(actions.reset());
       dispatch(actions.setUserRole({ userRole }));
-      dispatch(thunkActions.search(getState().query, []));
+      if (getState().query !== "") {
+        dispatch(actions.reset());
+        dispatch(thunkActions.search(getState().query, []));
+      }
     };
   },
   search: (query, filters) => {
