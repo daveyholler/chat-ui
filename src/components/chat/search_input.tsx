@@ -1,10 +1,14 @@
 import { cn } from "../../lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Reload } from "../images/reload";
 import SearchIcon from "../images/searchIcon";
 
-export default function SearchInput({ onSearch, searchActive }) {
-  const [query, setQuery] = useState<string>("");
+export default function SearchInput({ onSearch, searchActive, value }) {
+  const [query, setQuery] = useState<string>(value);
+
+  useEffect(() => {
+    setQuery(value);
+  }, [value]);
   return (
     <form
       className="w-full"

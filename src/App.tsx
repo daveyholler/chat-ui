@@ -127,6 +127,7 @@ function Results({ searchResponse }: { searchResponse: SearchResponse }) {
 function App() {
   const dispatch = useAppDispatch();
   const searchResponse = useAppSelector((state) => state.searchResponse);
+  const searchQuery = useAppSelector((state) => state.query);
   const loading = useAppSelector((state) => state.loading);
 
   const onSearch = (query) => {
@@ -134,13 +135,43 @@ function App() {
     dispatch(thunkActions.search(query, []));
   };
 
+  const suggestedQueries = [
+    "What is our work from home policy?",
+    "What's the NASA sales team?",
+    "Does the company own my personal project?",
+    "What job openings do we have?"
+  ]
+
   return (
     <>
       <Header />
       <div className="p-8">
         <div className="max-w-2xl mx-auto">
-          <SearchInput onSearch={onSearch} searchActive={searchResponse} />
+          <SearchInput onSearch={onSearch} value={searchQuery} searchActive={searchResponse} />
         </div>
+
+        {!loading && !searchResponse && (
+          <div className="text-left mt-20 w-96 mx-auto">
+            <h1 className="text-xl font-bold mb-4">
+              Ask a question about
+            </h1>
+            <div className="flex flex-col space-y-4">
+              {suggestedQueries.map((query) => (
+                <a
+                  href="#"
+                  className="text-lg text-dark-blue hover:text-blue-700"
+                  onClick={(e) => {
+                    e.preventDefault();
+
+                    onSearch(query);
+                  }}
+                >
+                  {query}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
 
         {loading && !searchResponse && (
           <div className="relative w-24 mx-auto py-10 opacity-30">

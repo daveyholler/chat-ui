@@ -35,8 +35,13 @@ export const SourceItem: React.FC<SourceType> = ({ name, icon, href }) => {
     },
   };
   return (
-    <div className="sourceItem" style={styles.wrapper}>
-      <a href={href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2">
+    <div className="sourceItem flex-wrap" style={styles.wrapper}>
+      <a
+        href={href}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex items-center gap-2 truncate"
+      >
         <SourceIcon icon={icon} />
         <span style={styles.label}>{name}</span>
       </a>

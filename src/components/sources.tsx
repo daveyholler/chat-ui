@@ -15,7 +15,7 @@ export const Sources: React.FC<SourcesType> = ({ sources, showDisclaimer }) => {
             information found in this document
           </h5>
         )}
-        <div className="flex space-x-2">
+        <div className="flex space-x-2 flex-wrap space-y-2">
           {sources.map((source) => (
             <SourceItem
               key={source.name}
