@@ -20,6 +20,9 @@ import onedrive from "./images/onedrive.png";
 import pdf from "./images/pdf.png";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
+import github from "./images/github.png";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import sharepoint from "./images/sharepoint.png";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -51,6 +54,7 @@ export type SourceIconType = {
     | "teams"
     | "sql_server"
     | "word"
+    | "github"
     | string;
 };
 export const SourceIcon: React.FC<SourceIconType> = ({ icon }) => {
@@ -67,6 +71,7 @@ export const SourceIcon: React.FC<SourceIconType> = ({ icon }) => {
     teams,
     sql_server,
     word,
+    github,
   };
   const styles = {
     iconWrapper: {
